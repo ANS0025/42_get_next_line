@@ -40,22 +40,17 @@ static char	*get_line(char *line, int i)
 
 char	*get_next_line(int fd)
 {
-	static char	*line;
-	char		*buffer;
-	int			read_bytes;
-	int			i;
+	static t_list	*list = NULL;
+	char			*next_line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
 		return (NULL);
-	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
+
+	create_list(&list, fd);
+	if (list == NULL)
 		return (NULL);
-	read_bytes = read(fd, buffer, BUFFER_SIZE);
-	if (read_bytes == -1)
-		return (free(buffer), NULL);
-	line = join_buffer(line, buffer, read_bytes);
-	i = 0;
-	while (line[i] != '\n' && line[i] != '\0')
-		i++;
-	return (get_line(line, i));
+	next_line = get_line(list);
+	polish_list(&list);
+
+	return (next_line);
 }

@@ -17,8 +17,14 @@
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1000
+#  define BUFFER_SIZE 10
 # endif
+
+typedef struct s_list
+{
+	char			*str_buffer;
+	struct s_list	*next;
+}		t_list;
 
 char	*get_next_line(int fd);
 char	*ft_strdup(const char *s1);
