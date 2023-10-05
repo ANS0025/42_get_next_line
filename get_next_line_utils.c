@@ -12,87 +12,106 @@
 
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *s1)
+int	found_newline(t_list *list)
 {
-	size_t	len;
-	char	*ptr;
+	int	i;
 
-	len = ft_strlen(s1) + 1;
-	ptr = malloc(len);
-	if (ptr)
-		ft_memcpy(ptr, s1, len);
-	return (ptr);
-}
-
-char	*ft_strjoin(const char *s1, const char *s2)
-{
-	unsigned long	len1;
-	unsigned long	len2;
-	char			*result;
-
-	len1 = 0;
-	len2 = 0;
-	if (s1)
-		len1 = ft_strlen(s1);
-	if (s2)
-		len2 = ft_strlen(s2);
-	result = (char *)malloc(len1 + len2 + 1);
-	if (result == NULL)
-		return (NULL);
-	if (len1 > 0)
-		ft_memcpy(result, s1, len1);
-	if (len2 > 0)
-		ft_memcpy(result + len1, s2, len2);
-	result[len1 + len2] = '\0';
-	return (result);
-}
-
-char	*ft_substr(const char *s, unsigned int start, size_t len)
-{
-	char			*substr;
-	size_t			s_len;
-	size_t			i;
-
-	if (!s)
-		return (NULL);
-	s_len = ft_strlen(s);
-	if (start > s_len)
-		len = 0;
-	if (len > s_len - start)
-		len = s_len - start;
-	substr = (char *)malloc(len + 1);
-	if (substr == NULL)
-		return (NULL);
-	i = 0;
-	while (i < len)
+	if (NULL == list)
+		return (0);
+	while (list)
 	{
-		substr[i] = s[start + i];
-		i++;
+		i = 0;
+		while (list->str_buffer[i] && i < BUFFER_SIZE)
+		{
+			if (list->str_buffer[i] == '\n')
+				return (1);
+			++i;
+		}
+		list = list->next;
 	}
-	substr[len] = '\0';
-	return (substr);
+	return (0);
 }
 
-size_t	ft_strlen(const char *str)
+t_list	*find_last_node(t_list *list)
 {
-	size_t	len;
+	if (NULL == list)
+		return (NULL);
+	while (list->next)
+		list = list->next;
+	return (list);
+}
 
+int	len_to_newline(t_list *list)
+{
+	int		i;
+	int		len;
+
+	if (!list)
+		return (0);
 	len = 0;
-	while (*str++ != '\0')
-		len++;
+	while (list)
+	{
+		i = 0;
+		while (list->str_buffer[i])
+		{
+			if (list->str_buffer[i] == '\n')
+			{
+				len++;
+				return (len);
+			}
+			i++;
+			len++;
+		}
+		list = list->next;
+	}
 	return (len);
 }
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+void	copy_str(t_list	*list, char *str)
 {
-	unsigned char	*s;
-	unsigned char	*d;
+	int	i;
+	int	j;
 
-	s = (unsigned char *)src;
-	d = (unsigned char *)dst;
-	if (src == NULL && dst == NULL)
-		return (NULL);
-	while (n--)
-		*d++ = *s++;
-	return (dst);
+	if (!list)
+		return ;
+	i = 0;
+	while (list)
+	{
+		j = 0;
+		while (list->str_buffer[j])
+		{
+			if (list->str_buffer[j] == '\n')
+			{
+				str[i++] = '\n';
+				str[i] = '\0';
+				return ;
+			}
+			str[i++] = list->str_buffer[j++];
+		}
+		list = list->next;
+	}
+	str[i] = '\0';
+}
+
+void	dealloc(t_list **list, t_list *clean_node, char *buffer)
+{
+	t_list	*tmp;
+
+	if (!list)
+		return ;
+	while (*list)
+	{
+		tmp = (*list)->next;
+		free((*list)->str_buffer);
+		free(*list);
+		*list = tmp;
+	}
+	*list = NULL;
+	if (clean_node->str_buffer[0])
+		*list = clean_node;
+	else
+	{
+		free(buffer);
+		free(clean_node);
+	}
 }

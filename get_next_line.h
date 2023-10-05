@@ -27,10 +27,14 @@ typedef struct s_list
 }		t_list;
 
 char	*get_next_line(int fd);
-char	*ft_strdup(const char *s1);
-char	*ft_strjoin(const char *s1, const char *s2);
-char	*ft_substr(const char *s, unsigned int start, size_t len);
-size_t	ft_strlen(const char *str);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
+void	create_list(t_list **list, int fd);
+void	append(t_list **list, char *buffer);
+char	*get_line(t_list *list);
+void	polish_list(t_list **list);
+int		len_to_newline(t_list *list);
+void	copy_str(t_list	*list, char *str);
+void	dealloc(t_list **list, t_list *clean_node, char *buffer);
+t_list	*find_last_node(t_list *list);
+int		found_newline(t_list *list);
 
 #endif
