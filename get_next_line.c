@@ -96,7 +96,7 @@ char	*get_next_line(int fd)
 	static char	*left_str;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
+		return (NULL);
 	left_str = read_to_left_str(fd, left_str);
 	if (!left_str)
 		return (NULL);
