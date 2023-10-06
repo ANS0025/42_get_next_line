@@ -40,7 +40,7 @@ char	*ft_strchr(const char *str, int c)
 	return (0);
 }
 
-char	*ft_strjoin(char *left_str, char *buff)
+char	*strjoin_and_free(char *left_str, char *buff)
 {
 	size_t	i;
 	size_t	j;

@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char	*ft_get_line(char *left_str)
+char	*get_line(char *left_str)
 {
 	int		i;
 	char	*str;
@@ -40,7 +40,7 @@ char	*ft_get_line(char *left_str)
 	return (str);
 }
 
-char	*ft_new_left_str(char *left_str)
+char	*new_left_str(char *left_str)
 {
 	int		i;
 	int		j;
@@ -66,7 +66,7 @@ char	*ft_new_left_str(char *left_str)
 	return (str);
 }
 
-char	*ft_read_to_left_str(int fd, char *left_str)
+char	*read_to_left_str(int fd, char *left_str)
 {
 	char	*buff;
 	int		rd_bytes;
@@ -84,7 +84,7 @@ char	*ft_read_to_left_str(int fd, char *left_str)
 			return (NULL);
 		}
 		buff[rd_bytes] = '\0';
-		left_str = ft_strjoin(left_str, buff);
+		left_str = strjoin_and_free(left_str, buff);
 	}
 	free(buff);
 	return (left_str);
@@ -97,10 +97,10 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	left_str = ft_read_to_left_str(fd, left_str);
+	left_str = read_to_left_str(fd, left_str);
 	if (!left_str)
 		return (NULL);
-	line = ft_get_line(left_str);
-	left_str = ft_new_left_str(left_str);
+	line = get_line(left_str);
+	left_str = new_left_str(left_str);
 	return (line);
 }
