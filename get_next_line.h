@@ -17,24 +17,12 @@
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 1000
 # endif
 
-typedef struct s_list
-{
-	char			*str_buffer;
-	struct s_list	*next;
-}		t_list;
-
 char	*get_next_line(int fd);
-void	create_list(t_list **list, int fd);
-void	append(t_list **list, char *buffer);
-char	*get_line(t_list *list);
-void	polish_list(t_list **list);
-int		len_to_newline(t_list *list);
-void	copy_str(t_list	*list, char *str);
-void	dealloc(t_list **list, t_list *clean_node, char *buffer);
-t_list	*find_last_node(t_list *list);
-int		found_newline(t_list *list);
+char	*ft_strchr(char *s, int c);
+char	*ft_strjoin(char *left_str, char *buff);
+size_t	ft_strlen(char *s);
 
 #endif

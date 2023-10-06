@@ -12,106 +12,60 @@
 
 #include "get_next_line.h"
 
-int	found_newline(t_list *list)
+size_t	ft_strlen(char *s)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i] != '\0')
+		i++;
+	return (i);
+}
+
+char	*ft_strchr(char *s, int c)
 {
 	int	i;
 
-	if (NULL == list)
+	i = 0;
+	if (!s)
 		return (0);
-	while (list)
+	if (c == '\0')
+		return ((char *)&s[ft_strlen(s)]);
+	while (s[i] != '\0')
 	{
-		i = 0;
-		while (list->str_buffer[i] && i < BUFFER_SIZE)
-		{
-			if (list->str_buffer[i] == '\n')
-				return (1);
-			++i;
-		}
-		list = list->next;
+		if (s[i] == (char) c)
+			return ((char *)&s[i]);
+		i++;
 	}
 	return (0);
 }
 
-t_list	*find_last_node(t_list *list)
+char	*ft_strjoin(char *left_str, char *buff)
 {
-	if (NULL == list)
+	size_t	i;
+	size_t	j;
+	char	*str;
+
+	if (!left_str)
+	{
+		left_str = (char *)malloc(1 * sizeof(char));
+		left_str[0] = '\0';
+	}
+	if (!left_str || !buff)
 		return (NULL);
-	while (list->next)
-		list = list->next;
-	return (list);
-}
-
-int	len_to_newline(t_list *list)
-{
-	int		i;
-	int		len;
-
-	if (!list)
-		return (0);
-	len = 0;
-	while (list)
-	{
-		i = 0;
-		while (list->str_buffer[i])
-		{
-			if (list->str_buffer[i] == '\n')
-			{
-				len++;
-				return (len);
-			}
-			i++;
-			len++;
-		}
-		list = list->next;
-	}
-	return (len);
-}
-
-void	copy_str(t_list	*list, char *str)
-{
-	int	i;
-	int	j;
-
-	if (!list)
-		return ;
-	i = 0;
-	while (list)
-	{
-		j = 0;
-		while (list->str_buffer[j])
-		{
-			if (list->str_buffer[j] == '\n')
-			{
-				str[i++] = '\n';
-				str[i] = '\0';
-				return ;
-			}
-			str[i++] = list->str_buffer[j++];
-		}
-		list = list->next;
-	}
-	str[i] = '\0';
-}
-
-void	dealloc(t_list **list, t_list *clean_node, char *buffer)
-{
-	t_list	*tmp;
-
-	if (!list)
-		return ;
-	while (*list)
-	{
-		tmp = (*list)->next;
-		free((*list)->str_buffer);
-		free(*list);
-		*list = tmp;
-	}
-	*list = NULL;
-	if (clean_node->str_buffer[0])
-		*list = clean_node;
-	else
-	{
-		free(buffer);
-		free(clean_node);
-	}
+	str = malloc(sizeof(char) * ((ft_strlen(left_str) + ft_strlen(buff)) + 1));
+	if (str == NULL)
+		return (NULL);
+	i = -1;
+	j = 0;
+	if (left_str)
+		while (left_str[++i] != '\0')
+			str[i] = left_str[i];
+	while (buff[j] != '\0')
+		str[i++] = buff[j++];
+	str[ft_strlen(left_str) + ft_strlen(buff)] = '\0';
+	free(left_str);
+	return (str);
 }
