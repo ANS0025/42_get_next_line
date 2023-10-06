@@ -21,8 +21,8 @@
 # endif
 
 char	*get_next_line(int fd);
-char	*ft_strchr(char *s, int c);
+char	*ft_strchr(const char *str, int c);
 char	*ft_strjoin(char *left_str, char *buff);
-size_t	ft_strlen(char *s);
+size_t	ft_strlen(const char *str);
 
 #endif
