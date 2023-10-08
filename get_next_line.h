@@ -22,7 +22,7 @@
 
 char	*get_next_line(int fd);
 char	*ft_strchr(const char *str, int c);
-char	*strjoin_and_free(char *prev_line, char *buf);
+char	*strjoin_and_free(char *read_lines, char *buf);
 size_t	ft_strlen(const char *str);
 
 #endif

@@ -40,30 +40,30 @@ char	*ft_strchr(const char *str, int c)
 	return (0);
 }
 
-char	*strjoin_and_free(char *prev_line, char *buf)
+char	*strjoin_and_free(char *read_lines, char *buf)
 {
 	size_t	i;
 	size_t	j;
 	char	*str;
 
-	if (!prev_line)
+	if (!read_lines)
 	{
-		prev_line = (char *)malloc(1 * sizeof(char));
-		prev_line[0] = '\0';
+		read_lines = (char *)malloc(1 * sizeof(char));
+		read_lines[0] = '\0';
 	}
-	if (!prev_line || !buf)
+	if (!read_lines || !buf)
 		return (NULL);
-	str = malloc(sizeof(char) * ((ft_strlen(prev_line) + ft_strlen(buf)) + 1));
+	str = malloc(sizeof(char) * ((ft_strlen(read_lines) + ft_strlen(buf)) + 1));
 	if (str == NULL)
 		return (NULL);
 	i = -1;
 	j = 0;
-	if (prev_line)
-		while (prev_line[++i] != '\0')
-			str[i] = prev_line[i];
+	if (read_lines)
+		while (read_lines[++i] != '\0')
+			str[i] = read_lines[i];
 	while (buf[j] != '\0')
 		str[i++] = buf[j++];
-	str[ft_strlen(prev_line) + ft_strlen(buf)] = '\0';
-	free(prev_line);
+	str[ft_strlen(read_lines) + ft_strlen(buf)] = '\0';
+	free(read_lines);
 	return (str);
 }

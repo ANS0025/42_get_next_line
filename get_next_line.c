@@ -12,61 +12,61 @@
 
 #include "get_next_line.h"
 
-char	*get_line(char *prev_line)
+char	*get_line(char *read_lines)
 {
 	int		i;
 	char	*str;
 
 	i = 0;
-	if (!prev_line[i])
+	if (!read_lines[i])
 		return (NULL);
-	while (prev_line[i] && prev_line[i] != '\n')
+	while (read_lines[i] && read_lines[i] != '\n')
 		i++;
 	str = (char *)malloc(sizeof(char) * (i + 2));
 	if (!str)
 		return (NULL);
 	i = 0;
-	while (prev_line[i] && prev_line[i] != '\n')
+	while (read_lines[i] && read_lines[i] != '\n')
 	{
-		str[i] = prev_line[i];
+		str[i] = read_lines[i];
 		i++;
 	}
-	if (prev_line[i] == '\n')
+	if (read_lines[i] == '\n')
 	{
-		str[i] = prev_line[i];
+		str[i] = read_lines[i];
 		i++;
 	}
 	str[i] = '\0';
 	return (str);
 }
 
-char	*new_prev_line(char *prev_line)
+char	*get_remaining_line(char *read_lines)
 {
 	int		i;
 	int		j;
 	char	*str;
 
 	i = 0;
-	while (prev_line[i] && prev_line[i] != '\n')
+	while (read_lines[i] && read_lines[i] != '\n')
 		i++;
-	if (!prev_line[i])
+	if (!read_lines[i])
 	{
-		free(prev_line);
+		free(read_lines);
 		return (NULL);
 	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(prev_line) - i + 1));
+	str = (char *)malloc(sizeof(char) * (ft_strlen(read_lines) - i + 1));
 	if (!str)
 		return (NULL);
 	i++;
 	j = 0;
-	while (prev_line[i])
-		str[j++] = prev_line[i++];
+	while (read_lines[i])
+		str[j++] = read_lines[i++];
 	str[j] = '\0';
-	free(prev_line);
+	free(read_lines);
 	return (str);
 }
 
-char	*get_prev_line(int fd, char *prev_line)
+char	*find_newline(int fd, char *read_lines)
 {
 	char	*buf;
 	int		rd_bytes;
@@ -75,7 +75,7 @@ char	*get_prev_line(int fd, char *prev_line)
 	if (!buf)
 		return (NULL);
 	rd_bytes = 1;
-	while (!ft_strchr(prev_line, '\n') && rd_bytes != 0)
+	while (!ft_strchr(read_lines, '\n') && rd_bytes != 0)
 	{
 		rd_bytes = read(fd, buf, BUFFER_SIZE);
 		if (rd_bytes == -1)
@@ -84,23 +84,23 @@ char	*get_prev_line(int fd, char *prev_line)
 			return (NULL);
 		}
 		buf[rd_bytes] = '\0';
-		prev_line = strjoin_and_free(prev_line, buf);
+		read_lines = strjoin_and_free(read_lines, buf);
 	}
 	free(buf);
-	return (prev_line);
+	return (read_lines);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*prev_line = NULL;
+	static char	*read_lines = NULL;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	prev_line = get_prev_line(fd, prev_line);
-	if (!prev_line)
+	read_lines = find_newline(fd, read_lines);
+	if (!read_lines)
 		return (NULL);
-	line = get_line(prev_line);
-	prev_line = new_prev_line(prev_line);
+	line = get_line(read_lines);
+	read_lines = get_remaining_line(read_lines);
 	return (line);
 }
